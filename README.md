@@ -8,7 +8,7 @@ During development, you can use the zap command to tip the maintainers of your d
 
 ```
 brew tap sudonym-btc/zap
-brew install zap && zap cmdInit $0
+brew install zap && zap cmdInit -- $0
 ```
 
 ### Connect to your wallet
