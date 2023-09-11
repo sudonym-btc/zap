@@ -31,7 +31,6 @@ func InitialConnectModel() WalletConnectModel {
 
 	amountInput := textinput.New()
 	amountInput.Placeholder = "100"
-	amountInput.Focus()
 
 	timer := timer.New(timeout)
 	return WalletConnectModel{
@@ -92,9 +91,6 @@ func (m WalletConnectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "shift+tab":
 			m.prevInput()
 		case "tab", "enter":
-			if m.focused == len(m.inputs) {
-				return m, m.Test
-			}
 			m.nextInput()
 		case "q", "esc", "ctrl+c":
 			return m, tea.Quit
@@ -110,6 +106,11 @@ func (m WalletConnectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	for i := range m.inputs {
 		var cmd tea.Cmd
 		m.inputs[i], cmd = m.inputs[i].Update(msg)
+		if m.focused == i {
+			m.inputs[i].Focus()
+		} else {
+			m.inputs[i].Blur()
+		}
 		cmds = append(cmds, cmd)
 	}
 
