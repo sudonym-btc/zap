@@ -22,11 +22,10 @@ func Fetch(address string) (*lnurl.LNURLPayParams, error) {
 }
 func FetchFromParams(msats int64, comment string, params lnurl.LNURLPayParams) (*string, error) {
 	slog.Debug("Fetching invoice from params", msats, comment, params)
-	var pd lnurl.PayerDataValues = lnurl.PayerDataValues{}
 
 	comment = comment[0:int(math.Min(float64(len(comment)), float64(params.CommentAllowed)))]
 
-	result, err := params.Call(msats, comment, &pd)
+	result, err := params.Call(msats, comment, nil)
 	if err != nil {
 		slog.Error("Failed fetching invoice", err)
 		return nil, err
