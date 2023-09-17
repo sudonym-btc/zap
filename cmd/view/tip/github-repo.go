@@ -1,6 +1,8 @@
 package tipView
 
 import (
+	"fmt"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/google/go-github/github"
@@ -62,6 +64,8 @@ func (m GithubRepoModel) View() string {
 				return view.PadVertical.Render(lipgloss.JoinHorizontal(lipgloss.Left, view.PadRight.Render(m.Progress.Spinner.View()), "Loading repository..."))
 			} else if len(m.Children) > 0 {
 				return taskView.DisplayOnlyDoneOrInProgress(m.Children)
+			} else if m.Progress.Failed {
+				return lipgloss.JoinHorizontal(lipgloss.Left, view.Cross.Render(), view.ErrorMessageStyle("Failed fetching repo: "+fmt.Sprint(*m.Progress.Error)))
 			}
 
 			return "No users found"

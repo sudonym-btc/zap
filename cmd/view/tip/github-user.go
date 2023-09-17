@@ -1,6 +1,8 @@
 package tipView
 
 import (
+	"fmt"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/google/go-github/github"
@@ -66,10 +68,11 @@ func (m GithubUserModel) View() string {
 
 	content := func() string {
 		return lipgloss.JoinVertical(lipgloss.Left, view.ItemStyle(m.name, ""), func() string {
-			if m.user == nil {
+			if m.Progress.InProgress {
 				return view.PadVertical.Render(lipgloss.JoinHorizontal(lipgloss.Left, view.PadRight.Render(m.Progress.Spinner.View()), "Loading user..."))
-			}
-			if len(m.Children) == 0 {
+			} else if m.Progress.Failed {
+				return lipgloss.JoinHorizontal(lipgloss.Left, view.Cross.Render(), view.ErrorMessageStyle("Failed fetching user: "+fmt.Sprint(*m.Progress.Error)))
+			} else if len(m.Children) == 0 {
 				return "No tippable addresses found"
 			}
 			return taskView.DisplayOnlyDoneOrInProgress(m.Children)

@@ -29,7 +29,14 @@ func (*GithubManager) FetchUser(name string) (*github.User, *github.Response, er
 
 func (*GithubManager) FetchRepo(name string) (*github.Repository, *github.Response, error) {
 	slog.Debug("Fetching repo", name)
-	return client.Repositories.Get(context.Background(), strings.Split(name, "/")[0], strings.Split(name, "/")[1])
+	repo, response, err := client.Repositories.Get(context.Background(), strings.Split(name, "/")[0], strings.Split(name, "/")[1])
+	if err != nil {
+		slog.Warn("Failed fetching repo", err)
+	} else {
+		slog.Debug("Fetched repo", repo)
+	}
+
+	return repo, response, err
 }
 
 func (*GithubManager) FetchOrg(name string) (*github.Organization, *github.Response, error) {
