@@ -1,8 +1,6 @@
 package task
 
 import (
-	"fmt"
-
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/gookit/slog"
@@ -155,7 +153,7 @@ func Failed(id int, err *error) func() tea.Msg {
 }
 
 func (m Model) Job() tea.Cmd {
-	fmt.Print("Job task")
+	slog.Error("Job task")
 	return nil
 }
 
